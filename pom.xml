@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.storeapi</groupId>
-    <artifactId>store</artifactId>
+    <artifactId>store-app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>store</name>
     <description>store</description>
@@ -37,14 +37,20 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>4.1.0-RC1</version>
         </dependency>
 
     </dependencies>
