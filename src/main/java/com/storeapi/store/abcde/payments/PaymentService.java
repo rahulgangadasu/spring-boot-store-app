@@ -1,4 +1,4 @@
-package com.storeapi.store.payments;
+package com.storeapi.store.abcde.payments;
 
 public interface PaymentService {
     void processPayment(double amount);

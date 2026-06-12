@@ -1,4 +1,4 @@
-package com.storeapi.store.payments;
+package com.storeapi.store.abcde.payments;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;

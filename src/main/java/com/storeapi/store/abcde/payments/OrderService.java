@@ -1,4 +1,4 @@
-package com.storeapi.store.payments;
+package com.storeapi.store.abcde.payments;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Lazy;
@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 @Service
-//@Lazy //for bean lazy initialization
-//@Scope("prototype") //to change scope of bean, default is singleton
+@Lazy //for bean lazy initialization
+@Scope("prototype") //to change scope of bean, default is singleton
 public class OrderService {
 
     private final PaymentService paymentService;
