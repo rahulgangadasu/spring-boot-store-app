@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: store-app
+
+stripe:
+  apiUrl: https://api.stripe.com
+  enabled: true
+  currencies: USD,EUR,INR
+  timeout: 1000
+
+server:
+  port: 8081
