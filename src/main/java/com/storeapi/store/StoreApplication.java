@@ -1,14 +1,23 @@
 package com.storeapi.store;
-import com.storeapi.store.notifications.NotificationManager;
-import com.storeapi.store.payments.OrderService;
-import org.springframework.boot.SpringApplication;
+
+import com.storeapi.store.entities.User;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 
 @SpringBootApplication
 public class StoreApplication {
     public static void main(String[] args) {
-        ApplicationContext context = SpringApplication.run(StoreApplication.class, args);
+        //SpringApplication.run(StoreApplication.class, args);
+        User user = User.builder()
+                .name("Rahul")
+                .email("rahulgangadasu@icloud.com")
+                .password("pandu")
+                .build();
+        System.out.println(user);
+    }
+}
+
+
+// ApplicationContext context = SpringApplication.run(StoreApplication.class, args);
 //        OrderService orderService = context.getBean(OrderService.class);
 //        System.out.println("Spring Boot Application Started");
 //        orderService.placeOrder();
@@ -26,5 +35,3 @@ public class StoreApplication {
 //        var orderService2 = new OrderService();
 //        orderService2.setPaymentService(new StripePaymentService());
 //        orderService2.placeOrder();
-    }
-}
