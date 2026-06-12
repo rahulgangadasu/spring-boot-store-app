@@ -1,6 +1,10 @@
 spring:
   application:
     name: store-app
+  datasource:
+    url: jdbc:mysql://localhost:3306/store?createDatabaseIfNotExist=true
+    username: root
+    password: pandu
 
 stripe:
   apiUrl: https://api.stripe.com
