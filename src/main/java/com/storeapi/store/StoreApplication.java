@@ -1,10 +1,15 @@
 package com.storeapi.store;
 
+import com.storeapi.store.entities.Product;
+import com.storeapi.store.repositories.ProductRepository;
 import com.storeapi.store.repositories.ProfileRepository;
 import com.storeapi.store.repositories.UserRepository;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.jpa.domain.Specification;
 
 
 @SpringBootApplication
@@ -16,6 +21,21 @@ public class StoreApplication {
         System.out.println(found.getBio());
         UserRepository userRepository = context.getBean(UserRepository.class);
         userRepository.findByEmail("rahulgangadasu@icloud.com");
+
+        var users = userRepository.findAllWithAddresses();
+        users.forEach(u ->{
+            System.out.println(u);
+            u.getAddresses().forEach(System.out::println);
+        });
+
+        ProductRepository productRepository = context.getBean(ProductRepository.class);
+        Product probe = new Product();
+        probe.setName("product");
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        Example<Product> example = Example.of(probe, matcher);
+        productRepository.findAll(example).forEach(System.out::println);
     }
 }
 
