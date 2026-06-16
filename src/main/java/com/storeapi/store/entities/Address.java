@@ -3,17 +3,15 @@ package com.storeapi.store.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-@Setter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
+@Getter
+@Setter
 @Entity
 @Table(name = "addresses")
 public class Address {
-
-    public Address(){}
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -25,11 +23,11 @@ public class Address {
     @Column(name = "city")
     private String city;
 
-    @Column(name = "state")
-    private String state;
-
     @Column(name = "zip")
     private String zip;
+
+    @Column(name = "state")
+    private String state;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
