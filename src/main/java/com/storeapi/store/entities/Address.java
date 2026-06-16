@@ -7,11 +7,12 @@ import lombok.*;
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 @ToString
 @Entity
 @Table(name = "addresses")
 public class Address {
+
+    public Address(){}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,10 +31,7 @@ public class Address {
     @Column(name = "zip")
     private String zip;
 
-    @Column(name = "user_id")
-    private Long userId;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     private User user;

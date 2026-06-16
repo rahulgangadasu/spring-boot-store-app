@@ -1,7 +1,10 @@
 package com.storeapi.store.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,7 +14,6 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@ToString
 @AllArgsConstructor
 @Builder // we can use @Builder to build an object
 @Table(name = "users")
@@ -33,7 +35,9 @@ public class User {
     @Column(nullable = false, name = "password")
     private String password;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true)
     @Builder.Default
     private List<Address> addresses = new ArrayList<>();
 
@@ -46,8 +50,8 @@ public class User {
     @Builder.Default
     private Set<Tag> tags = new HashSet<>();
 
-    @OneToOne(mappedBy = "user")
-    private Profile profile;
+//    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+//    private Profile profile;
 
     @ManyToMany
     @JoinTable(
@@ -71,6 +75,14 @@ public class User {
         Tag tag = new Tag(tagName);
         tags.add(tag);
         tag.getUsers().add(this);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "name = " + name + ", " +
+                "email = " + email + ")";
     }
 }
 
