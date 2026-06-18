@@ -1,5 +1,6 @@
 package com.storeapi.store.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class Category {
     private String name;
 
     @OneToMany(mappedBy = "category")
+    @JsonManagedReference //to avoid deeply nested JSON serialization
     private Set<Product> products = new HashSet<>();
 
     public Category(String name) {
