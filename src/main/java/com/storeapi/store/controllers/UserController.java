@@ -1,6 +1,10 @@
 package com.storeapi.store.controllers;
 
+import com.storeapi.store.dtos.ChangePasswordRequest;
+import com.storeapi.store.dtos.RegisterUserRequest;
+import com.storeapi.store.dtos.UpdateUserRequest;
 import com.storeapi.store.dtos.UserDto;
+import com.storeapi.store.entities.User;
 import com.storeapi.store.mappers.UserMapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import lombok.AllArgsConstructor;
 
 import com.storeapi.store.repositories.UserRepository;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Set;
 
@@ -40,5 +45,54 @@ public class UserController {
             return ResponseEntity.notFound().build();
             //return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(userMapper.toDto(user), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<UserDto> createUser(
+            @RequestBody RegisterUserRequest request,
+            UriComponentsBuilder uriBuilder){
+        User user = userMapper.toEntity(request);
+        userRepository.save(user);
+        var userDto = userMapper.toDto(user);
+        var uri = uriBuilder.path("/users/{id}").buildAndExpand(userDto.getId()).toUri();
+        return ResponseEntity.created(uri).body(userDto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDto> updateUser(
+            @PathVariable(name = "id") Long userId,
+            @RequestBody UpdateUserRequest request) {
+        var user = userRepository.findById(userId).orElse(null);
+        if (user == null)
+            return ResponseEntity.notFound().build();
+
+        userMapper.update(request, user);
+        userRepository.save(user);
+
+        return new ResponseEntity<>(userMapper.toDto(user), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable(name = "id") Long userId){
+        var user = userRepository.findById(userId).orElse(null);
+        if (user == null)
+            return ResponseEntity.notFound().build();
+        userRepository.delete(user);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/change-password")
+    public ResponseEntity<Void> changePassword(
+            @PathVariable(name = "id") Long userId,
+            @RequestBody ChangePasswordRequest request){
+        var user = userRepository.findById(userId).orElse(null);
+        if (user == null)
+            return ResponseEntity.notFound().build();
+        if(!user.getPassword().equals(request.getOldPassword()))
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        user.setPassword(request.getNewPassword());
+        userRepository.save(user);
+        return ResponseEntity.noContent().build();
     }
 }
