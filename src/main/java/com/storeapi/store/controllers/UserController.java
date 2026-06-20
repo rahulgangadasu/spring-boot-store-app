@@ -6,15 +6,20 @@ import com.storeapi.store.dtos.UpdateUserRequest;
 import com.storeapi.store.dtos.UserDto;
 import com.storeapi.store.entities.User;
 import com.storeapi.store.mappers.UserMapper;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import lombok.AllArgsConstructor;
 
 import com.storeapi.store.repositories.UserRepository;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -48,9 +53,15 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(
-            @RequestBody RegisterUserRequest request,
+    public ResponseEntity<?> registerUser(
+            @Valid @RequestBody RegisterUserRequest request,
             UriComponentsBuilder uriBuilder){
+        if(userRepository.existsByEmail(request.getEmail())){
+            return ResponseEntity.badRequest().body(
+                    Map.of("Email", "Email already exists")
+            );
+        }
+
         User user = userMapper.toEntity(request);
         userRepository.save(user);
         var userDto = userMapper.toDto(user);
