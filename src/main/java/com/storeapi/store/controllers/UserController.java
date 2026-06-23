@@ -1,15 +1,13 @@
 package com.storeapi.store.controllers;
 
-import com.storeapi.store.dtos.ChangePasswordRequest;
-import com.storeapi.store.dtos.RegisterUserRequest;
-import com.storeapi.store.dtos.UpdateUserRequest;
-import com.storeapi.store.dtos.UserDto;
+import com.storeapi.store.dtos.*;
 import com.storeapi.store.entities.User;
 import com.storeapi.store.mappers.UserMapper;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import lombok.AllArgsConstructor;
 
@@ -26,6 +24,7 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping()
     public Iterable<UserDto> getAllUsers(
@@ -60,6 +59,7 @@ public class UserController {
         }
 
         User user = userMapper.toEntity(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
         var userDto = userMapper.toDto(user);
         var uri = uriBuilder.path("/users/{id}").buildAndExpand(userDto.getId()).toUri();
